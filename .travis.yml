@@ -1,0 +1,4 @@
+language: csharp 
+solution: Submit-o-tron.sln
+script: 
+  - xbuild /p:Configuration=Release Submit-o-tron.sln
