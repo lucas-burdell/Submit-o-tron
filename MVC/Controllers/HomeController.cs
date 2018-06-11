@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -15,18 +16,16 @@ namespace MVC.Controllers
             return View();
         }
 
-        public IActionResult About()
+        [HttpPost]
+        public IActionResult Upload(ICollection<IFormFile> file)
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
+            Console.WriteLine("GOT FILES. Number of files: " + file.Count);
+            foreach (var item in file) {
+                Console.WriteLine(item.FileName);
+            }
+            ViewBag.Message = "Upload successful!";
+            ViewBag.MessageType = "text-success";   
+            return View("Index");
         }
 
         public IActionResult Error()
