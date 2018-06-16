@@ -6,22 +6,34 @@
     <div class="col">
         <p class="@ViewBag.MessageType">@ViewBag.Message</p>
         <div id="dropzone" class="dropzone">
-            <div class="dz-message needsclick">
-                Drop project folder here or click to upload.
+            <div class="dz-message">
+                Drop project folder here.
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    Dropzone.autoDiscover = false;
-    Dropzone.prototype._getParamName = function(n) {
-            if (typeof this.options.paramName === "function") {
-                return this.options.paramName(n);
-            } else {
-//                return "" + this.options.paramName + (this.options.uploadMultiple ? "[" + n + "]" : "");
-                return "" + this.options.paramName;
-            }
-        };
-    var myDropzone = new Dropzone("#dropzone", { url: "/Home/Upload", uploadMultiple: true, paramName: "file"});
+Dropzone.autoDiscover = false;
+Dropzone.prototype._getParamName = function(n) {
+    if (typeof this.options.paramName === "function") {
+        return this.options.paramName(n);
+    } else {
+        return "" + this.options.paramName;
+    }
+};
+var myDropzone = new Dropzone("#dropzone", { url: "/Upload/", uploadMultiple: true, paramName: "file", clickable: false});
+myDropzone.on("sending", function(file, xhr, data) {
+    if(file.fullPath){
+        data.append("fullPath", file.fullPath);
+    }
+});
+myDropzone.on("success", function(file, responseText) {
+    console.log(responseText);
+});
+myDropzone.on("queuecomplete", function(event) {
+    window.location.replace('@Url.Action("", "UploadComplete")');
+});
+    
+
 </script>

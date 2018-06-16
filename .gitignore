@@ -1,3 +1,6 @@
+## Ignore repo filesystem
+MVC/repos/*
+
 ## Ignore VS Code stuff
 .vscode/*
 !.vscode/settings.json
@@ -335,3 +338,4 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
