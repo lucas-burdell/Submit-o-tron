@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/lucas-burdell/Submit-o-tron.svg?branch=master)](https://travis-ci.org/lucas-burdell/Submit-o-tron)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/lucas-burdell/Submit-o-tron.svg)](https://github.com/lucas-burdell/Submit-o-tron)
 # Submit-o-tron
 An in-progress submission portal for introductory computer science students.
 
