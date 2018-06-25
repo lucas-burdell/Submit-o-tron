@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace Submitotron.MVC.Controllers
 {
-    [Route("upload/")]
     public class UploadController : Controller
     {
         private readonly HomeworkFileAccess _fileAccess;
@@ -18,7 +17,13 @@ namespace Submitotron.MVC.Controllers
             _fileAccess = fileAccess;
         }
 
-         [HttpPost("")]
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+         [HttpPost]
         public async Task<IActionResult> Upload(List<IFormFile> file, List<string> fullPath)
         {
 
@@ -32,12 +37,11 @@ namespace Submitotron.MVC.Controllers
                 homeworkFile.FormFile = file[i];
                 submission.Files.Add(homeworkFile);
             }
-            Console.WriteLine($"SAVING {file.Count} FILES");
             await _fileAccess.TrySaveAsync(submission);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("UploadComplete");
         }               
 
-        [HttpGet("/UploadComplete")]
+        [HttpGet]
         public IActionResult UploadComplete()
         {
             return View("UploadComplete");
