@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace Submitotron.Core
 {
@@ -21,9 +21,10 @@ namespace Submitotron.Core
             _homeworks = homeworks;
         }
 
-        public Homework GetItemById(string id) {
+        public Homework GetItemById(string id)
+        {
             return _homeworks.FirstOrDefault(x => x.ID == id);
-        } 
+        }
 
         public List<Homework> GetItems()
         {

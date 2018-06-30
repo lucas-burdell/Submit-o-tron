@@ -7,55 +7,78 @@ namespace Submitotron.Core
 {
     public class HomeworkFileAccess
     {
-
-        private readonly IHomeworkRepo _homeworkRepo;
-        private readonly IStudentRepo _studentRepo;
         private readonly IConfiguration _configuration;
 
-        public HomeworkFileAccess(IStudentRepo studentRepo, IHomeworkRepo homeworkRepo, IConfiguration configuration)
+        public HomeworkFileAccess(IConfiguration configuration)
         {
-            _studentRepo = studentRepo;
-            _homeworkRepo = homeworkRepo;
             _configuration = configuration;
         }
         public async Task<bool> TrySaveAsync(HomeworkSubmission submission)
         {
             try
             {
-                var rootPath = GetSubmissionPath(submission);
-
-                var isFolderExists = Directory.Exists(rootPath);
-                if (!isFolderExists)
-                    System.IO.Directory.CreateDirectory(rootPath);
-                foreach (var file in submission.Files)
-                {
-                    var cleanedOriginalPath = file.FullPath.Replace( Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-                    var newFilePath = Path.Combine(rootPath, cleanedOriginalPath);
-                    var fileParentDirectory = Directory.GetParent(newFilePath).ToString();
-                    var UploadPathExists = Directory.Exists(fileParentDirectory);
-                    if (!UploadPathExists)
-                        Directory.CreateDirectory(fileParentDirectory);
-                    var readStream = file.FormFile.OpenReadStream();
-                    var writeStream = new FileStream(newFilePath, FileMode.Create);
-                    await readStream.CopyToAsync(writeStream);
-                    writeStream.Close();
-                    readStream.Close();
-                    readStream.Dispose();
-                    writeStream.Dispose();
-                }
+                await SaveAsync(submission);
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                LogError(e);
                 return false;
             }
         }
 
-        public string GetSubmissionPath(HomeworkSubmission submission)
+        private void LogError(Exception e)
         {
-            var homeworkName = Guid.NewGuid();
-            var rootPath = Path.Combine("repos", "homeworks", homeworkName.ToString());
-            return rootPath;
+            Console.Error.WriteLine(e);
+        }
+
+        private async Task SaveAsync(HomeworkSubmission submission)
+        {
+            var rootPath = GetSubmissionDirectory(submission);
+            foreach (var file in submission.Files)
+            {
+                var cleanedOriginalPath = FixPathFileSeperators(file.FullPath);
+                var newFilePath = Path.Combine(rootPath, cleanedOriginalPath);
+                var fileParentDirectory = CreateDirectoryIfNotExists(Directory.GetParent(newFilePath).ToString());
+                await SaveFile(file, newFilePath);
+            }
+        }
+
+        private async Task SaveFile(HomeworkFile file, string path)
+        {
+            var readStream = file.FormFile.OpenReadStream();
+            var writeStream = new FileStream(path, FileMode.Create);
+            await readStream.CopyToAsync(writeStream);
+            writeStream.Close();
+            readStream.Close();
+            readStream.Dispose();
+            writeStream.Dispose();
+        }
+
+        private string CreateDirectoryIfNotExists(string path)
+        {
+            var isFolderExists = Directory.Exists(path);
+            if (!isFolderExists)
+                Directory.CreateDirectory(path);
+            return path;
+        }
+
+        private string FixPathFileSeperators(string path)
+        {
+            return path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+        }
+
+        private string GetRepoRootPath()
+        {
+            var root = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
+            return Path.Combine(root, "repos");
+        }
+
+        public string GetSubmissionDirectory(HomeworkSubmission submission)
+        {
+            var homeworkName = submission.HomeworkID;
+            var rootPath = Path.Combine(GetRepoRootPath(), "homeworks", homeworkName.ToString());
+            return CreateDirectoryIfNotExists(rootPath);
         }
     }
 }

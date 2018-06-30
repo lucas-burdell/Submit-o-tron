@@ -23,13 +23,12 @@ namespace Submitotron.MVC.Controllers
             return View();
         }
 
-         [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Upload(List<IFormFile> file, List<string> fullPath)
         {
-
             var submission = new HomeworkSubmission();
-            submission.StudentID = Guid.NewGuid().ToString();
-            submission.HomeworkID = Guid.NewGuid().ToString();
+            submission.StudentID = "LucasBurdell";
+            submission.HomeworkID = "Homework01";
             for (var i = 0; i < file.Count; i++) 
             {
                 var homeworkFile = new HomeworkFile();
