@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col">
+        <p class="@ViewBag.MessageType">@ViewBag.Message</p>
+        <form id="dropzone" class="dropzone">
+            <div class="dz-message">
+                Drop project folder here.
+            </div>
+        </form>
+        <button id="submit-button" class="btn btn-primary">Submit files</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        Dropzone.autoDiscover = false;
+        Dropzone.prototype._getParamName = function(n) {
+            if (typeof this.options.paramName === "function") {
+                return this.options.paramName(n);
+            } else {
+                return "" + this.options.paramName;
+            }
+        };
+        var myDropzone = new Dropzone("#dropzone", { url: '@Url.Action("Upload", "Upload")', uploadMultiple: true, paramName: "file", clickable: false, autoProcessQueue: false});
+        myDropzone.on("sending", function(file, xhr, data) {
+            if(file.fullPath){
+                data.append("fullPath", file.fullPath);
+            }
+        });
+        myDropzone.on("success", function(file, responseText) {
+            console.log(responseText);
+        });
+        myDropzone.on("queuecomplete", function(event) {
+            window.location.replace('@Url.Action("UploadComplete", "Upload")');
+        });
+        
+        $("#submit-button").click(function()
+        {
+            $("#submit-button").text("Submitting...");
+            $("#submit-button").removeClass("btn-primary");
+            $("#submit-button").addClass("btn-default");
+            $('#submit-button').prop('disabled', true);
+            myDropzone.options.autoProcessQueue = true;
+            myDropzone.processQueue();
+        });
+    });
+
+    
+
+</script>

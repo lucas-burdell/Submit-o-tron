@@ -2,26 +2,4 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="row">
-    <div class="col">
-        <p class="@ViewBag.MessageType">@ViewBag.Message</p>
-        <div id="dropzone" class="dropzone">
-            <div class="dz-message needsclick">
-                Drop project folder here or click to upload.
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    Dropzone.autoDiscover = false;
-    Dropzone.prototype._getParamName = function(n) {
-            if (typeof this.options.paramName === "function") {
-                return this.options.paramName(n);
-            } else {
-//                return "" + this.options.paramName + (this.options.uploadMultiple ? "[" + n + "]" : "");
-                return "" + this.options.paramName;
-            }
-        };
-    var myDropzone = new Dropzone("#dropzone", { url: "/Home/Upload", uploadMultiple: true, paramName: "file"});
-</script>
+<a class="btn btn-primary lead" href='@Url.Action("Index", "Upload")'>Upload Project</a>

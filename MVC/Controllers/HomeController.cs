@@ -7,25 +7,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
-namespace MVC.Controllers
+namespace Submitotron.MVC.Controllers
 {
     public class HomeController : Controller
     {
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
-        }
-
-        [HttpPost]
-        public IActionResult Upload(ICollection<IFormFile> file)
-        {
-            Console.WriteLine("GOT FILES. Number of files: " + file.Count);
-            foreach (var item in file) {
-                Console.WriteLine(item.FileName);
-            }
-            ViewBag.Message = "Upload successful!";
-            ViewBag.MessageType = "text-success";   
-            return View("Index");
         }
 
         public IActionResult Error()
