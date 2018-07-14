@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/lucas-burdell/Submit-o-tron.svg?branch=master)](https://travis-ci.org/lucas-burdell/Submit-o-tron)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/lucas-burdell/Submit-o-tron.svg)](https://github.com/lucas-burdell/Submit-o-tron)
+![GitHub issues](https://img.shields.io/github/issues/lucas-burdell/submit-o-tron.svg)
 # Submit-o-tron
 An in-progress submission portal for introductory computer science students.
 
@@ -9,7 +10,7 @@ The purpose of the Submit-o-tron is for introductory computer science students t
 
 ## Tasklist
 - [x] Continuous Integration support by Travis
-- [ ] Simple project folder upload portal
-- [ ] Login authentication/authorization through Google accounts
+- [x] Simple project folder upload portal
+- [x] Login authentication/authorization through Google accounts
 - [ ] Enforce proper project naming
 - [ ] Add management portal for tutors/professors
